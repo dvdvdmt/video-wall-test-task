@@ -1,0 +1,7 @@
+.videos {
+  display: grid;
+  grid-auto-rows: 270px;
+  grid-row-gap: 20px;
+  grid-column-gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
