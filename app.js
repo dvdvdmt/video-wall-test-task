@@ -2,10 +2,11 @@ const VIDEO_MAX_WIDTH = 480;
 const VIDEO_MAX_HEIGHT = 270;
 
 const getVideoIds = () => {
-  const idsString = 'sw-l5SW5hik,2jSWMme12ik,p8npDG2ulKQ,pl-DjiO8das,CJRw18MtRPg,Wpm07-BGJnE,xf4iv4ic70M,6Q0AazVu1Tc,Xyb1fsPG-Xk,kG41zm8HGSE,RxvcH25WThg,df7PZIVe1lw,sYvH7Y16iUM,juTa0fPI22M,2KuqjW0WtZg,dKccvk36atQ,Duc3F700lgE,TI5bEf-BULU,sxyotaytAS0,UZ47aQFp2TQ,qD2yyikDcDw,O4_JNAFClFk,iJz5jURaEBc,RBbkCEHBw_I,CX11yw6YL1w';
+  const url = new URL(location.href);
+  const ids = url.searchParams.get('id');
   // Parse 'id' param, filter empty elements and left only unique ones 
-  return Array.from(new Set(idsString.split(',')
-    .filter(id => id)));
+  return ids ? Array.from(new Set(ids.split(',')
+    .filter(id => id))) : [];
 };
 
 const stopAndHideAllActiveVideos = () => {
