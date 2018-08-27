@@ -1,6 +1,3 @@
-const VIDEO_MAX_WIDTH = 480;
-const VIDEO_MAX_HEIGHT = 270;
-
 const getVideoIds = () => {
   const url = new URL(location.href);
   const ids = url.searchParams.get('id');
@@ -42,8 +39,6 @@ const createPreviewImage = videoId => {
 
 const createVideoPlayer = () => {
   const iframe = document.createElement('iframe');
-  iframe.width = VIDEO_MAX_WIDTH;
-  iframe.height = VIDEO_MAX_HEIGHT;
   iframe.frameBorder = 0;
   iframe.allowFullscreen = true;
 
