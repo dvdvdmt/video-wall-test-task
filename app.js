@@ -10,32 +10,31 @@ const getVideoIds = () => {
 
 const stopAndHideAllActiveVideos = () => {
   const iframes = document.querySelectorAll('iframe');
-  for(const i of iframes){
+  for (const i of iframes) {
     i.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
   }
-  
+
   const activeTiles = document.querySelectorAll('.video--active');
-  for(const t of activeTiles){
+  for (const t of activeTiles) {
     t.classList.remove('video--active');
   }
 };
 
 const handlePreviewImageClick = videoId => e => {
   stopAndHideAllActiveVideos();
-  
+
   const tile = e.target.closest('.video');
   tile.classList.add('video--active');
   const iframe = tile.querySelector('iframe');
-  if(!iframe.src) {
+  if (!iframe.src) {
     iframe.src = `//www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&version=3`;
   }
 };
 
 const createPreviewImage = videoId => {
-  const img = document.createElement('img');
-  img.width = VIDEO_MAX_WIDTH;
-  img.height = VIDEO_MAX_HEIGHT;
-  img.src = `//i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+  const img = document.createElement('div');
+  img.classList.add('video__preview');
+  img.style.backgroundImage = `url('//i.ytimg.com/vi/${videoId}/hqdefault.jpg')`;
   img.addEventListener('click', handlePreviewImageClick(videoId));
   return img;
 };
@@ -50,12 +49,28 @@ const createVideoPlayer = () => {
   return iframe;
 };
 
-const createTile = videoId => {
+const setVideoTitle = async (videoId, videoEl) => {
+  const videoUrl = new URL(`http://www.youtube.com/watch?v=${videoId}`);
+  const videoPreview = videoEl.querySelector('.video__preview');
+  const defaultTitle = 'Cool video';
+  try {
+    const res = await fetch(`//noembed.com/embed?url=${videoUrl}`);
+    const data = await res.json();
+    videoPreview.title = data.title || defaultTitle;
+    videoPreview.alt = videoPreview.title;
+  } catch (e) {
+    videoEl.title = defaultTitle;
+  }
+};
+
+const createVideo = videoId => {
   const div = document.createElement('div');
   div.classList.add('video');
 
   div.appendChild(createPreviewImage(videoId));
   div.appendChild(createVideoPlayer());
+
+  setVideoTitle(videoId, div);
 
   return div;
 };
@@ -66,10 +81,10 @@ const renderVideos = rootSelector => {
   const videoIds = getVideoIds();
 
   for (const videoId of videoIds) {
-    root.appendChild(createTile(videoId));
+    root.appendChild(createVideo(videoId));
   }
 };
 
-document.addEventListener('DOMContentLoaded', e => {
+document.addEventListener('DOMContentLoaded', () => {
   renderVideos('.container');
 });

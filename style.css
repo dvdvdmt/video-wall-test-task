@@ -13,7 +13,6 @@
   flex: 0 0 480px;
   margin-top: 40px;
   margin-left: 40px;
-  cursor: pointer;
 }
 
 .video iframe {
@@ -25,4 +24,34 @@
 
 .video--active iframe {
   display: block;
+}
+
+.video__preview {
+  position: relative;
+  cursor: pointer;
+  width: 480px;
+  height: 270px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.video__preview::before {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: absolute;
+  content: attr(title);
+  bottom: 0;
+  height: 58px;
+  width: 100%;
+  color: white;
+  font-size: 24px;
+  font-family: Helvetica, serif;
+  background: linear-gradient(to bottom, transparent 0%, black 100%);
+}
+
+.video__preview:hover::before {
+  transition: height 0.3s;
+  height: 50%;
 }
